@@ -35,7 +35,7 @@ class Session(models.Model):
     end_year = models.DateField()
 
     def __str__(self):
-        return "From " + str(self.start_year) + " to " + str(self.end_year)
+        return "Từ ngày " + str(self.start_year) + " đến " + str(self.end_year)
 
 
 class CustomUser(AbstractUser):
@@ -57,7 +57,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.last_name + ", " + self.first_name
+        return  self.first_name + " " + self.last_name
 
 
 class Admin(models.Model):
