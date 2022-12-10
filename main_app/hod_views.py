@@ -166,24 +166,27 @@ def add_subject_fee(request):
     }
     if request.method == 'POST':
         if form.is_valid():
-            name = form.cleaned_data.get('name')
             course = form.cleaned_data.get('course')
-            staff = form.cleaned_data.get('staff')
+            subject = form.cleaned_data.get('subject')
+            session = form.cleaned_data.get('session')
+            money = form.cleaned_data.get('money')
+
             try:
-                subject = Subject()
-                subject.name = name
-                subject.staff = staff
-                subject.course = course
-                subject.save()
+                subjectFee = SubjectFee()
+                subjectFee.course = course
+                subjectFee.subject = subject
+                subjectFee.session = session
+                subjectFee.money = money
+                subjectFee.save()
                 messages.success(request, "Đã lưu thành công!")
-                return redirect(reverse('add_subject'))
+                return redirect(reverse('add_subject_fee'))
 
             except Exception as e:
                 messages.error(request, "Thêm mới không thành công... " + str(e))
         else:
             messages.error(request, "Vui lòng điền đầy đủ thông tin yêu cầu...")
 
-    return render(request, 'hod_template/add_subject_template.html', context)
+    return render(request, 'hod_template/add_subject_fee_template.html', context)
 
 
 def manage_staff(request):

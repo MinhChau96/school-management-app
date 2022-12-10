@@ -1,6 +1,5 @@
 from django import forms
 from django.forms.widgets import DateInput, TextInput
-
 from .models import *
 
 
@@ -108,7 +107,7 @@ class SubjectFeeForm(FormSettings):
 
     class Meta:
         model = SubjectFee
-        fields = ['name', 'staff', 'course']
+        fields = ['course', 'subject', 'session', 'money']
 
 
 class SessionForm(FormSettings):
