@@ -1,0 +1,52 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+
+{% block content %}
+
+    <section class="content">
+        <div class="container-fluid" style="alignment: bottom">
+            <div class="row">
+                <div class="col-md-auto">
+                    <!-- general form elements -->
+                    <div class="card card-danger mb-2">
+                        <div class="card-header">
+                            <h3 class="card-title ">{{ page_title }}</h3>
+                        </div>
+
+                        <form role="form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+
+
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        {{ field.errors }}
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-danger btn-block">
+                                    {% if button_text %}
+                                        {{ button_text }}
+                                    {% else %}
+                                        Submit
+                                    {% endif %}
+
+                                </button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

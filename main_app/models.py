@@ -73,7 +73,6 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
-
 class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
@@ -105,12 +104,30 @@ class SubjectFee(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    money = models.DecimalField(max_digits=10, decimal_places=2)
+    money = models.DecimalField(max_digits=10,
+                                decimal_places=2,
+                                default=500000,
+                                )
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.course
+class ReceiveSubjectFee(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject_fee = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    other_fee = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    total_fee = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    advance_money = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    payment = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    cash_in_return = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    created_by = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student
+
 
 
 class Attendance(models.Model):

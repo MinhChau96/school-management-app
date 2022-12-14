@@ -45,19 +45,22 @@ urlpatterns = [
     path("session/edit/<int:session_id>",
          hod_views.edit_session, name='edit_session'),
     path("student/view/feedback/", hod_views.student_feedback_message,
-         name="student_feedback_message",),
+         name="student_feedback_message", ),
     path("staff/view/feedback/", hod_views.staff_feedback_message,
-         name="staff_feedback_message",),
+         name="staff_feedback_message", ),
     path("student/view/leave/", hod_views.view_student_leave,
-         name="view_student_leave",),
-    path("staff/view/leave/", hod_views.view_staff_leave, name="view_staff_leave",),
+         name="view_student_leave", ),
+    path("staff/view/leave/", hod_views.view_staff_leave, name="view_staff_leave", ),
     path("attendance/view/", hod_views.admin_view_attendance,
-         name="admin_view_attendance",),
+         name="admin_view_attendance", ),
     path("attendance/fetch/", hod_views.get_admin_attendance,
          name='get_admin_attendance'),
     path("student/add/", hod_views.add_student, name='add_student'),
     path("subject/add/", hod_views.add_subject, name='add_subject'),
     path("subject_fee/add/", hod_views.add_subject_fee, name='add_subject_fee'),
+    path("subject_fee/manage/", hod_views.manage_subject_fee, name='manage_subject_fee'),
+    path("subject_fee/edit/", hod_views.edit_subject_fee, name='edit_subject_fee'),
+    path("subject_fee/receive/", hod_views.receive_subject_fee, name='receive_subject_fee'),
     path("staff/manage/", hod_views.manage_staff, name='manage_staff'),
     path("student/manage/", hod_views.manage_student, name='manage_student'),
     path("course/manage/", hod_views.manage_course, name='manage_course'),
@@ -81,9 +84,7 @@ urlpatterns = [
          hod_views.edit_student, name='edit_student'),
     path("course/edit/<int:course_id>",
          hod_views.edit_course, name='edit_course'),
-    path("subject/edit/<int:subject_id>",
-         hod_views.edit_subject, name='edit_subject'),
-
+    path("subject/edit/<int:subject_id>", hod_views.edit_subject, name='edit_subject'),
 
     # Staff
     path("staff/home/", staff_views.staff_home, name='staff_home'),
@@ -111,8 +112,6 @@ urlpatterns = [
          name='edit_student_result'),
     path('staff/result/fetch/', staff_views.fetch_student_result,
          name='fetch_student_result'),
-
-
 
     # Student
     path("student/home/", student_views.student_home, name='student_home'),

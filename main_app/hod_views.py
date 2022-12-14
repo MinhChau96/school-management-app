@@ -59,7 +59,8 @@ def add_staff(request):
             passport_url = fs.url(filename)
             try:
                 user = CustomUser.objects.create_user(
-                    email=email, password=password, user_type=2, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                    email=email, password=password, user_type=2, first_name=first_name, last_name=last_name,
+                    profile_pic=passport_url)
                 user.gender = gender
                 user.address = address
                 user.staff.course = course
@@ -93,7 +94,8 @@ def add_student(request):
             passport_url = fs.url(filename)
             try:
                 user = CustomUser.objects.create_user(
-                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name,
+                    profile_pic=passport_url)
                 user.gender = gender
                 user.address = address
                 user.student.session = session
@@ -189,6 +191,75 @@ def add_subject_fee(request):
     return render(request, 'hod_template/add_subject_fee_template.html', context)
 
 
+def edit_subject_fee(request):
+    subjectfee = get_object_or_404(SubjectFee, id=subjectfee_id)
+    form = SubjectFeeForm(request.POST or None, instance=subjectfee)
+    context = {
+        'form': form,
+        'subjectfee_id': subjectfee_id,
+        'page_title': 'Chỉnh sửa môn học',
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            course = form.cleaned_data.get('course')
+            subject = form.cleaned_data.get('subject')
+            session = form.cleaned_data.get('session')
+            money = form.cleaned_data.get('money')
+            try:
+                subjectfee = SubjectFee.objects.get(id=subjectfee_id)
+                subjectfee.course = course
+                subjectfee.subject = subject
+                subjectfee.session = session
+                subjectfee.save()
+                messages.success(request, "Đã cập nhật thông tin!")
+                return redirect(reverse('edit_subject_fee', args=[subjectfee_id]))
+            except Exception as e:
+                messages.error(request, "Thêm mới không thành công... " + str(e))
+            else:
+                messages.error(request, "Vui lòng điền đầy đủ thông tin yêu cầu...")
+        return render(request, 'hod_template/edit_subject_fee_template.html', context)
+
+def receive_subject_fee(request):
+    # return HttpResponse('Chuc nang [Thu hoc phi]')
+    form = ReceiveSubjectFeeForm(request.POST or None)
+    context = {
+        'form': form,
+        'page_title': 'Thu học phí'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            student = form.cleaned_data.get('student')
+            subject_fee = form.cleaned_data.get('subject_fee')
+            other_fee = form.cleaned_data.get('other_fee')
+            total_fee = form.cleaned_data.get('total_fee')
+            advance_money = form.cleaned_data.get('advance_money')
+            payment = form.cleaned_data.get('payment')
+            cash_in_return = form.cleaned_data.get('cash_in_return')
+            created_by = form.cleaned_data.get('created_by')
+
+            try:
+                receiveSubjectFee = ReceiveSubjectFee()
+                receiveSubjectFee.student = student
+                receiveSubjectFee.subject_fee = subject_fee
+                receiveSubjectFee.other_fee = other_fee
+                receiveSubjectFee.total_fee = total_fee
+                receiveSubjectFee.advance_money = advance_money
+                receiveSubjectFee.payment = payment
+                receiveSubjectFee.cash_in_return = cash_in_return
+                receiveSubjectFee.created_by = created_by
+                receiveSubjectFee.save()
+                messages.success(request, "Đã lưu thành công!")
+                return redirect(reverse('receive_subject_fee'))
+
+            except Exception as e:
+                messages.error(request, "Thêm mới không thành công... " + str(e))
+        else:
+            messages.error(request, "Vui lòng điền đầy đủ thông tin yêu cầu...")
+
+    return render(request, 'hod_template/receive_subject_fee_template.html', context)
+
+
+
 def manage_staff(request):
     allStaff = CustomUser.objects.filter(user_type=2)
     context = {
@@ -196,6 +267,15 @@ def manage_staff(request):
         'page_title': 'Quản lý nhân viên'
     }
     return render(request, "hod_template/manage_staff.html", context)
+
+
+def manage_subject_fee(request):
+    subjectFees = SubjectFee.objects.all()
+    context = {
+        'subjectFees': subjectFees,
+        'page_title': 'Danh sách học phí'
+    }
+    return render(request, "hod_template/manage_subject_fee.html", context)
 
 
 def manage_student(request):
@@ -527,6 +607,7 @@ def view_student_leave(request):
 def admin_view_attendance(request):
     subjects = Subject.objects.all()
     sessions = Session.objects.all()
+
     context = {
         'subjects': subjects,
         'sessions': sessions,
@@ -551,7 +632,7 @@ def get_admin_attendance(request):
         json_data = []
         for report in attendance_reports:
             data = {
-                "status":  str(report.status),
+                "status": str(report.status),
                 "name": str(report.student)
             }
             json_data.append(data)
@@ -630,7 +711,7 @@ def send_student_notification(request):
             'to': student.admin.fcm_token
         }
         headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
+                       'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
                    'Content-Type': 'application/json'}
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStudent(student=student, message=message)
@@ -657,7 +738,7 @@ def send_staff_notification(request):
             'to': staff.admin.fcm_token
         }
         headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
+                       'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
                    'Content-Type': 'application/json'}
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStaff(staff=staff, message=message)
@@ -688,7 +769,8 @@ def delete_course(request, course_id):
         messages.success(request, "Đã xóa khóa học thành công!")
     except Exception:
         messages.error(
-            request, "Sorry, some students are assigned to this course already. Kindly change the affected student course and try again")
+            request,
+            "Sorry, some students are assigned to this course already. Kindly change the affected student course and try again")
     return redirect(reverse('manage_course'))
 
 

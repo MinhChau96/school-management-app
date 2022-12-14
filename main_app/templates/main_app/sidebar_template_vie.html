@@ -1,5 +1,5 @@
 {% load static %}
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-danger elevation-4">
 {% if request.user.user_type == '1' %}
     <!-- Brand Logo -->
     <a href="{% url 'admin_home' %}" class="brand-link">
@@ -161,18 +161,19 @@
                     </a>
                 </li>
 
-{#                <li class="nav-item">#}
-{#                    {% url 'manage_subject_fee' as manage_subject_fee %}#}
-{#                    {% url 'edit_subject_fee' subject_id as edit_subject_fee %}#}
-{#                    <a href="{{manage_subject_fee}}"#}
-{#                        class="nav-link  {% if edit_subject_fee == request.path or manage_subject_fee == request.path %} active {% endif %}">#}
-{#                        <i class="nav-icon fas fa-money-check"></i>#}
-{#                        <p>#}
-{#                            Quản lý học phí#}
-{##}
-{#                        </p>#}
-{#                    </a>#}
-{#                </li>#}
+                <li class="nav-item">
+                    {% url 'manage_subject_fee' as manage_subject_fee %}
+                    {% url 'edit_subject_fee' subject_id as edit_subject_fee %}
+                    <a href="{{manage_subject_fee}}"
+                        class="nav-link  {% if edit_subject_fee == request.path or manage_subject_fee == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-money-check"></i>
+                        <p>
+                            Quản lý học phí
+
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     {% url 'add_session' as add_session %}
                     <a href="{{add_session}}" class="nav-link  {% if add_session == request.path %} active {% endif %}">
@@ -193,6 +194,17 @@
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    {% url 'receive_subject_fee' as receive_subject_fee %}
+                    <a href="{{receive_subject_fee}}" class="nav-link  {% if receive_subject_fee == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        <p>
+                            Thu học phí
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     {% url 'admin_view_attendance' as admin_view_attendance %}
                     <a href="{{admin_view_attendance}}" class="nav-link  {% if admin_view_attendance == request.path %} active {% endif %}">

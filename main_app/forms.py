@@ -89,6 +89,7 @@ class CourseForm(FormSettings):
 
     class Meta:
         fields = ['name']
+        labels = {'name':'Khóa học'}
         model = Course
 
 
@@ -99,6 +100,10 @@ class SubjectForm(FormSettings):
 
     class Meta:
         model = Subject
+        labels = {'name':'Môn học',
+                  'staff':'Giáo viên',
+                  'course':'Khóa học'
+                  }
         fields = ['name', 'staff', 'course']
 
 class SubjectFeeForm(FormSettings):
@@ -107,7 +112,27 @@ class SubjectFeeForm(FormSettings):
 
     class Meta:
         model = SubjectFee
+        labels = {'course':'Khóa học',
+                  'subject':'Môn học',
+                  'session':'Nhóm',
+                  'money':'Học phí'}
         fields = ['course', 'subject', 'session', 'money']
+
+class ReceiveSubjectFeeForm(FormSettings):
+    def __init__(self, *args, **kwargs):
+        super(ReceiveSubjectFeeForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = ReceiveSubjectFee
+        labels = {'student':'Học sinh',
+                  'subject_fee':'Học phí',
+                  'other_fee':'Chi phí khác',
+                  'total_fee':'Thành tiền phải thu',
+                  'advance_money':'Tiền đã ứng trước',
+                  'payment':'Tiền thanh toán',
+                  'cash_in_return':'Số dư tài khoản'}
+        fields = ['student', 'subject_fee', 'other_fee', 'total_fee', 'advance_money', 'payment', 'cash_in_return']
+
 
 
 class SessionForm(FormSettings):
@@ -117,6 +142,9 @@ class SessionForm(FormSettings):
     class Meta:
         model = Session
         fields = '__all__'
+        labels = {'start_year':'Bắt đầu',
+                  'end_year':'Kết thúc'
+                  }
         widgets = {
             'start_year': DateInput(attrs={'type': 'date'}),
             'end_year': DateInput(attrs={'type': 'date'}),

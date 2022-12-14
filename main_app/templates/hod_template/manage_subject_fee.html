@@ -1,0 +1,57 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+
+{% block content %}
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-danger mb-2">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khóa học</th>
+                                    <th>Môn học</th>
+                                    <th>Nhóm</th>
+                                    <th>Học phí</th>
+                                    <th>Chỉnh sửa</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for subjectFee in subjectFees %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ subjectFee.course }}</td>
+                                        <td>{{ subjectFee.subject }}</td>
+                                        <td>{{ subjectFee.session }}</td>
+                                        <td>{{ subjectFee.money }}</td>
+                                        <td>
+{#                                            <a href="{% url 'edit_subject_fee' subjectFee.subjectFee.id %}"#}
+{#                                               class="btn btn-primary">#}
+{#                                                Cập nhật#}
+{#                                            </a> -#}
+{#                                            <a href="{% url 'delete_subject_fee' subjectFee.subjectFee.id %}"#}
+{#                                               class="btn btn-danger"#}
+{#                                               onclick="return confirm('Bạn chắc chắn muốn xóa học phí này?')">#}
+{#                                                Xóa#}
+{#                                            </a>#}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
