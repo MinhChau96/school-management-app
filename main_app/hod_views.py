@@ -191,13 +191,13 @@ def add_subject_fee(request):
     return render(request, 'hod_template/add_subject_fee_template.html', context)
 
 
-def edit_subject_fee(request):
+def edit_subject_fee(request, subjectfee_id):
     subjectfee = get_object_or_404(SubjectFee, id=subjectfee_id)
     form = SubjectFeeForm(request.POST or None, instance=subjectfee)
     context = {
         'form': form,
         'subjectfee_id': subjectfee_id,
-        'page_title': 'Chỉnh sửa môn học',
+        'page_title': 'Chỉnh sửa học phí',
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -210,6 +210,7 @@ def edit_subject_fee(request):
                 subjectfee.course = course
                 subjectfee.subject = subject
                 subjectfee.session = session
+                subjectfee.money=money
                 subjectfee.save()
                 messages.success(request, "Đã cập nhật thông tin!")
                 return redirect(reverse('edit_subject_fee', args=[subjectfee_id]))
@@ -218,6 +219,9 @@ def edit_subject_fee(request):
             else:
                 messages.error(request, "Vui lòng điền đầy đủ thông tin yêu cầu...")
         return render(request, 'hod_template/edit_subject_fee_template.html', context)
+    else:
+        subjectfee = SubjectFee.objects.get(id=subjectfee_id)
+        return render(request, "hod_template/edit_subject_fee_template.html", context)
 
 def receive_subject_fee(request):
     # return HttpResponse('Chuc nang [Thu hoc phi]')
@@ -760,6 +764,12 @@ def delete_student(request, student_id):
     student.delete()
     messages.success(request, "Đã xóa học sinh thành công!")
     return redirect(reverse('manage_student'))
+
+def delete_subject_fee(request, subjectfee_id):
+    subjectFee = get_object_or_404(SubjectFee, id=subjectfee_id)
+    subjectFee.delete()
+    messages.success(request, "Đã xóa học phí!")
+    return redirect(reverse('manage_subject_fee'))
 
 
 def delete_course(request, course_id):

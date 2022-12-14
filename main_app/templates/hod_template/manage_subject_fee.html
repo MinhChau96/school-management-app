@@ -34,15 +34,12 @@
                                         <td>{{ subjectFee.session }}</td>
                                         <td>{{ subjectFee.money }}</td>
                                         <td>
-{#                                            <a href="{% url 'edit_subject_fee' subjectFee.subjectFee.id %}"#}
-{#                                               class="btn btn-primary">#}
-{#                                                Cập nhật#}
-{#                                            </a> -#}
-{#                                            <a href="{% url 'delete_subject_fee' subjectFee.subjectFee.id %}"#}
-{#                                               class="btn btn-danger"#}
-{#                                               onclick="return confirm('Bạn chắc chắn muốn xóa học phí này?')">#}
-{#                                                Xóa#}
-{#                                            </a>#}
+                                           <a href="{% url 'edit_subject_fee' subjectFee.id %}"
+                                              class="btn btn-primary">
+                                                Cập nhật
+                                            </a>
+                                            <a href="{% url 'delete_subject_fee' subjectFee.id %}" class="btn btn-danger" onclick="return confirm('Bạn chắc chắn muốn xóa học phí này?')">Xóa</a>
+
                                         </td>
                                     </tr>
                                 {% endfor %}
