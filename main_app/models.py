@@ -92,7 +92,7 @@ class Staff(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=120)
-    staff = models.ForeignKey(Staff,on_delete=models.CASCADE,)
+    staff = models.ForeignKey(Staff,on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -106,13 +106,14 @@ class SubjectFee(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     money = models.DecimalField(max_digits=10,
                                 decimal_places=2,
-                                default=500000,
+                                default=0,
                                 )
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.course
+
 class ReceiveSubjectFee(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject_fee = models.DecimalField(max_digits=15, decimal_places=0, default=0)

@@ -7,14 +7,49 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-auto">
-                <!-- general form elements -->
-                <div class="card card-danger mb-2">
-                    <div class="card-header">
+                <div class="ml-auto mr-auto col-lg-4 col-md-6 col-sm-8 col-10">
+                    <!-- general form elements -->
+                    <div class="card mb-2">
+                        <div class="card-header bg-danger">
                         <h3 class="card-title">{{page_title}}</h3>
                     </div>
 
-                    {% include "main_app/form_template.html" with messages=messages  form=form button_text="Lưu"%}
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.course.label_tag }}</strong>
+                                        {{ form.course }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.name.label_tag }}</strong>
+                                        {{ form.name }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.staff.label_tag }}</strong>
+                                        {{ form.staff }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-footer -->
+                            <div class="card-footer" style="text-align: right">
+                                <button type="#" class="btn btn-outline-dark col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 h-25">
+                                    Xóa bảng
+                                </button>
+
+                                <button type="submit"
+                                        class="btn btn-danger col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 h-25">
+                                    {% if button_text %}
+                                        {{ button_text }}
+                                    {% else %}
+                                        Thêm mới
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </form>
                 </div>
                 <!-- /.card -->
 

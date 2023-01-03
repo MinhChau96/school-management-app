@@ -1,43 +1,63 @@
 {% extends 'main_app/base.html' %}
 {% load static %}
-{% block page_title %}{{page_title}}{% endblock page_title %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
 
 {% block content %}
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-danger mb-2">
-                    <div class="card-header">
-                        <h3 class="card-title">{{page_title}}</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-danger mb-2">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr class="text-center">
+                                    <th style="width: 50px">Stt</th>
                                     <th>Bắt đầu</th>
                                     <th>Kết thúc</th>
-                                    <th>Chỉnh sửa</th>
+                                    <th style="width: 150px">Chỉnh sửa</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 {% for session in sessions %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{session.start_year}}</td>
-                                    <td>{{session.end_year}}</td>
-                                    <td><a href="{% url 'edit_session' session.id %}" class="btn btn-primary">Edit</a> - <a href="{% url 'delete_session' session.id %}" onclick="return confirm('Bạn chắc chắn muốn xóa nhóm này?')" class="btn btn-danger">Xóa</a> </td>
-                                </tr>
+                                    <tr class="text-center">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ session.start_year }}</td>
+                                        <td>{{ session.end_year }}</td>
+                                        <td>
+                                            <a href="{% url 'delete_session' session.id %}"
+                                               onclick="return confirm('Bạn chắc chắn muốn xóa nhóm này?')"
+                                               class="btn btn-outline-danger h-25" style="min-width: 50px">
+                                                Xóa
+                                            </a> -
+                                            <a href="{% url 'edit_session' session.id %}"
+                                               class="btn btn-outline-dark h-25" style="min-width: 50px">
+                                                Sửa
+                                            </a>
+
+                                        </td>
+                                    </tr>
                                 {% endfor %}
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer" style="text-align: right">
+                            {% url 'add_session' as add_session %}
+                            <a href="{{ add_session }}"
+                               class="btn btn-danger h-25 {% if add_session == request.path %} active {% endif %}"
+                               style="min-width: 150px">
+                                Thêm nhóm học
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock content %}

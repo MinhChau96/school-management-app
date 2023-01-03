@@ -16,31 +16,46 @@
                     <div class="card-body">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
+                                <tr class="text-center">
+                                    <th style="width: 50px">Stt</th>
                                     <th>Tên môn học</th>
                                     <th>Phụ trách</th>
                                     <th>Khóa học</th>
-                                    <th>Chỉnh sửa</th>
+                                    <th style="width: 150px">Chỉnh sửa</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for subject in subjects %}
                                 <tr>
-                                    <td>{{ forloop.counter }}</td>
+                                    <td class="text-center">{{ forloop.counter }}</td>
                                     <td>{{subject.name}}</td>
                                     <td>{{subject.staff.admin}}</td>
                                     <td>{{subject.course.name}}</td>
-                                    <td>
-                                        <a href="{% url 'edit_subject' subject.id %}" class="btn btn-primary">Edit</a> -
-                                        <a href="{% url 'delete_subject' subject.id %}" onclick="return confirm('Bạn chắc chắn muốn xóa môn học {{subject.name}}?')" class="btn btn-danger">Xóa</a>
-
+                                    <td class="text-center">
+                                        <a href="{% url 'delete_subject' subject.id %}"
+                                           onclick="return confirm('Bạn chắc chắn muốn xóa môn học {{subject.name}}?')"
+                                           class="btn btn-outline-danger h-25" style="min-width: 50px">
+                                            Xóa
+                                        </a> -
+                                        <a href="{% url 'edit_subject' subject.id %}"
+                                           class="btn btn-outline-dark h-25" style="min-width: 50px">
+                                            Sửa
+                                        </a>
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+
+                        <div class="card-footer" style="text-align: right">
+                            {% url 'add_subject' as add_subject %}
+                            <a href="{{ add_subject }}"
+                               class="btn btn-danger h-25 {% if add_subject == request.path %} active {% endif %}"
+                               style="min-width: 150px">
+                                Thêm môn học
+                            </a>
+                        </div>
                 </div>
             </div>
         </div>

@@ -12,16 +12,18 @@ class FormSettings(forms.ModelForm):
 
 
 class CustomUserForm(FormSettings):
-    email = forms.EmailField(label='Địa chỉ mail',required=True)
-    gender = forms.ChoiceField(label='Giới tính',choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')])
-    first_name = forms.CharField(label='Họ',required=True)
-    last_name = forms.CharField(label='(Tên đệm) Tên',required=True)
-    address = forms.CharField(label='Địa chỉ',widget=forms.Textarea)
-    password = forms.CharField(label='Mật khẩu',widget=forms.PasswordInput)
+    email = forms.EmailField(label='Địa chỉ mail', required=True)
+    gender = forms.ChoiceField(label='Giới tính', choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')])
+    first_name = forms.CharField(label='Họ', required=True)
+    last_name = forms.CharField(label='(Tên đệm) Tên', required=True)
+    address = forms.CharField(label='Địa chỉ', widget=forms.Textarea(attrs={"rows": 2}))
+    password = forms.CharField(label='Mật khẩu', widget=forms.PasswordInput)
     widget = {
         'password': forms.PasswordInput(),
     }
-    profile_pic = forms.ImageField(label='Ảnh đại diện',)
+    profile_pic = forms.ImageField(label='Ảnh đại diện', widget = forms.FileInput(
+        attrs={"id": "image_field"}
+    ))
 
     def __init__(self, *args, **kwargs):
         super(CustomUserForm, self).__init__(*args, **kwargs)
@@ -32,7 +34,8 @@ class CustomUserForm(FormSettings):
             for field in CustomUserForm.Meta.fields:
                 self.fields[field].initial = instance.get(field)
             if self.instance.pk is not None:
-                self.fields['password'].widget.attrs['placeholder'] = "Chỉ điền thông tin vào ô này nếu bạn muốn thay đổi mật khẩu"
+                self.fields['password'].widget.attrs[
+                    'placeholder'] = "Chỉ điền thông tin vào ô này nếu bạn muốn thay đổi mật khẩu"
 
     def clean_email(self, *args, **kwargs):
         formEmail = self.cleaned_data['email'].lower()
@@ -51,7 +54,7 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'gender',  'password','profile_pic', 'address' ]
+        fields = ['first_name', 'last_name', 'email', 'gender', 'password', 'profile_pic', 'address']
 
 
 class StudentForm(CustomUserForm):
@@ -61,7 +64,7 @@ class StudentForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'session']
+                 ['course', 'session']
 
 
 class AdminForm(CustomUserForm):
@@ -80,7 +83,7 @@ class StaffForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Staff
         fields = CustomUserForm.Meta.fields + \
-            ['course' ]
+                 ['course']
 
 
 class CourseForm(FormSettings):
@@ -89,7 +92,7 @@ class CourseForm(FormSettings):
 
     class Meta:
         fields = ['name']
-        labels = {'name':'Khóa học'}
+        labels = {'name': 'Khóa học'}
         model = Course
 
 
@@ -100,11 +103,12 @@ class SubjectForm(FormSettings):
 
     class Meta:
         model = Subject
-        labels = {'name':'Môn học',
-                  'staff':'Giáo viên',
-                  'course':'Khóa học'
+        labels = {'name': 'Môn học',
+                  'staff': 'Giáo viên',
+                  'course': 'Khóa học'
                   }
         fields = ['name', 'staff', 'course']
+
 
 class SubjectFeeForm(FormSettings):
     def __init__(self, *args, **kwargs):
@@ -112,11 +116,15 @@ class SubjectFeeForm(FormSettings):
 
     class Meta:
         model = SubjectFee
-        labels = {'course':'Khóa học',
-                  'subject':'Môn học',
-                  'session':'Nhóm',
-                  'money':'Học phí'}
+        labels = {'course': 'Khóa học',
+                  'subject': 'Môn học',
+                  'session': 'Nhóm',
+                  'money': 'Học phí'}
+        widgets = {
+            'money': forms.NumberInput(attrs={'step': 50000}),
+        }
         fields = ['course', 'subject', 'session', 'money']
+
 
 class ReceiveSubjectFeeForm(FormSettings):
     def __init__(self, *args, **kwargs):
@@ -124,15 +132,22 @@ class ReceiveSubjectFeeForm(FormSettings):
 
     class Meta:
         model = ReceiveSubjectFee
-        labels = {'student':'Học sinh',
-                  'subject_fee':'Học phí',
-                  'other_fee':'Chi phí khác',
-                  'total_fee':'Thành tiền phải thu',
-                  'advance_money':'Tiền đã ứng trước',
-                  'payment':'Tiền thanh toán',
-                  'cash_in_return':'Số dư tài khoản'}
+        labels = {'student': 'Học sinh',
+                  'subject_fee': 'Học phí',
+                  'other_fee': 'Chi phí khác',
+                  'total_fee': 'Thành tiền phải thu',
+                  'advance_money': 'Tiền đã ứng trước',
+                  'payment': 'Tiền thanh toán',
+                  'cash_in_return': 'Số dư tài khoản'}
+        widgets = {
+            'subject_fee': forms.NumberInput(attrs={'step': 10000}),
+            'other_fee': forms.NumberInput(attrs={'step': 10000}),
+            'total_fee': forms.NumberInput(attrs={'step': 10000}),
+            'advance_money': forms.NumberInput(attrs={'step': 10000}),
+            'payment': forms.NumberInput(attrs={'step': 10000}),
+            'cash_in_return': forms.NumberInput(attrs={'step': 10000}),
+        }
         fields = ['student', 'subject_fee', 'other_fee', 'total_fee', 'advance_money', 'payment', 'cash_in_return']
-
 
 
 class SessionForm(FormSettings):
@@ -142,8 +157,8 @@ class SessionForm(FormSettings):
     class Meta:
         model = Session
         fields = '__all__'
-        labels = {'start_year':'Bắt đầu',
-                  'end_year':'Kết thúc'
+        labels = {'start_year': 'Bắt đầu',
+                  'end_year': 'Kết thúc'
                   }
         widgets = {
             'start_year': DateInput(attrs={'type': 'date'}),
@@ -201,7 +216,7 @@ class StudentEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields 
+        fields = CustomUserForm.Meta.fields
 
 
 class StaffEditForm(CustomUserForm):
