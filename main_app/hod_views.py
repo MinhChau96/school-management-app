@@ -353,8 +353,8 @@ def edit_staff(request, staff_id):
         else:
             messages.error(request, "Vui lòng điền đầy đủ thông tin yêu cầu...")
     else:
-        user = CustomUser.objects.get(id=staff_id)
-        staff = Staff.objects.get(id=user.id)
+        # user = CustomUser.objects.get(id=staff_id)
+        # staff = Staff.objects.get(id=user.id)
         return render(request, "hod_template/edit_staff_template.html", context)
 
 

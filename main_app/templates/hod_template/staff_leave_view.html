@@ -1,132 +1,142 @@
 {% extends 'main_app/base.html' %}
 {% load static %}
-{% block page_title %}{{page_title}}{% endblock page_title %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
 
 {% block content %}
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- general form elements -->
-                <div class="card card-danger mb-2">
-                    <div class="card-header">
-                        <h3 class="card-title">{{page_title}}</h3>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-danger mb-2">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+
+                        <div class="table card-body">
+                            <table class="table table-bordered">
+                                <tr class="text-center">
+                                    <th style="width: 50px">Stt</th>
+                                    <th style="width: 200px">Nhân viên</th>
+                                    <th>Khóa học</th>
+                                    <th>Nội dung</th>
+                                    <th style="width: 100px">Ngày nghỉ</th>
+                                    <th style="width: 180px">Gửi lúc</th>
+                                    <th style="width: 120px">Trạng thái</th>
+                                </tr>
+                                {% for leave in  allLeave %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ leave.staff }}</td>
+                                        <td>{{ leave.staff.course }}</td>
+                                        <td>{{ leave.message }}</td>
+                                        <td class="text-center">{{ leave.date }}</td>
+                                        <td class="text-center">{{ leave.created_at }}</td>
+
+                                        {% if leave.status == 0 %}
+                                            <td class="text-center">
+                                                <button data-toggle="modal"
+                                                        data-target="#reply_modal"
+                                                        value="{{ leave.id }}"
+                                                        class="btn btn-warning reply_open_modal">
+                                                    Phản hồi
+                                                </button>
+                                        {% elif leave.status == -1 %}
+                                            <td class="text-center">
+                                                <span class='badge badge-danger'>
+                                                    Không duyệt
+                                                </span>
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span class='badge badge-success'>
+                                                    Chấp thuận
+                                                </span>
+                                            </td>
+
+                                            <td>{{ feedback.updated_at }}</td>
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
                     </div>
+                    <!-- /.card -->
 
-                    <div class="table card-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nhân viên</th>
-                                <th>Khóa học</th>
-                                <th>Nội dung</th>
-                                <th>Ngày nghỉ</th>
-                                <th>Gửi lúc</th>
-                                <th>Trạng thái</th>
-
-                            </tr>
-                            {% for leave in  allLeave %}
-                              <tr>
-                                  <td>{{forloop.counter}}</td>
-                                  <td>{{leave.staff}}</td>
-                                  <td>{{leave.staff.course}}</td>
-                                  <td>{{leave.message}}</td>
-                                  <td>{{leave.date}}</td>
-                                  <td>{{leave.created_at}}</td>
-                                 
-                                      
-                                      {% if leave.status == 0 %}
-                                           <td> <button data-toggle = "modal" data-target = "#reply_modal" value="{{leave.id}}" class="btn btn-primary reply_open_modal">Reply</button>
-{% elif leave.status == -1 %}
-<td><span  class='badge badge-danger'>Rejected</span></td>
-{% else %}
-<td><span  class='badge badge-success'>Approved</span></td>
-
-                                            <td>{{feedback.updated_at}}</td>
-                                      {% endif %}
-                                          
-                                  </td>
-                       
-                              </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                    </div>
-                <!-- /.card -->
-
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<div class = "modal fade" id = "reply_modal" tabindex = "-1" role = "dialog" 
-   aria-labelledby = "myModalLabel" aria-hidden = "true">
-   
-   <div class = "modal-dialog">
-      <div class = "modal-content">
-         <div class = "modal-header">
-             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">&times;</button>
-             <h4 class = "modal-title" id = "myModalLabel"></h4>
-         </div>
+    </section>
+    <div class="modal fade" id="reply_modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
 
-         <div class = "modal-body">
-             <input type="hidden"  id="id">
-             <p> Reply To <span id="reply_name"></span>'s Leave Request</p>
-             <select id="reply_leave_status" class="form-control">
-                 <option value="">-- Chọn --</option>
-                 <option value="1">Đồng ý</option>
-                 <option value="-1">Không đồng ý</option>
-             </select>
-         </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
 
-         <div class = "modal-footer">
-            <button type = "button" class = "btn btn-default" data-dismiss = "modal">Đóng</button>
-            <button id="reply_btn" class="btn btn-success btn-block">Gửi</button>
-         </div>
-      </div><!-- /.modal-content -->
-   </div><!-- /.modal-dialog -->
-  
-</div><!-- /.modal -->
+                <div class="modal-body">
+                    <input type="hidden" id="id">
+                    <p> Reply To <span id="reply_name"></span>'s Leave Request</p>
+                    <select id="reply_leave_status" class="form-control">
+                        <option value="">-- Chọn --</option>
+                        <option value="1">Đồng ý</option>
+                        <option value="-1">Không đồng ý</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="reply_btn" class="btn btn-success btn-block">Gửi</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </div><!-- /.modal -->
 {% endblock content %}
 {% block custom_js %}
-  <script>
-      $(document).ready(function(){
-          $(".reply_open_modal").click(function(){
-              var id = $(this).val()
-              var name = $(this).parents("tr").children("td:eq(1)").text()
-              $("#reply_name").text(name)
-              $("#id").val(id)
-              
-              
+    <script>
+        $(document).ready(function () {
+            $(".reply_open_modal").click(function () {
+                var id = $(this).val()
+                var name = $(this).parents("tr").children("td:eq(1)").text()
+                $("#reply_name").text(name)
+                $("#id").val(id)
+
+
             })
-            
-            $("#reply_btn").on("click", function(){
+
+            $("#reply_btn").on("click", function () {
                 var id = $("#id").val()
                 var status = $("#reply_leave_status").val()
-                if (status == '1' || status == '-1'){
+                if (status == '1' || status == '-1') {
 
-    $.ajax({
-        url: "{% url 'view_staff_leave' %}",
-        type:'POST',
-        data:{
-              id:id,
-              status:status
-        }
-    }).done(function(response){
-        if (response == "True"){
-            alert("Đã phản hồi!")
-            location.reload()
-        }else{
-            alert("Phản hồi chưa được gửi...")
-        }
-    }).fail(function(response){
-        alert("Lỗi!!!")
-    })
-}else{
-    alert("Vui lòng chọn nội dung phản hồi...")
-}
+                    $.ajax({
+                        url: "{% url 'view_staff_leave' %}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            status: status
+                        }
+                    }).done(function (response) {
+                        if (response == "True") {
+                            alert("Đã phản hồi!")
+                            location.reload()
+                        } else {
+                            alert("Phản hồi chưa được gửi...")
+                        }
+                    }).fail(function (response) {
+                        alert("Lỗi!!!")
+                    })
+                } else {
+                    alert("Vui lòng chọn nội dung phản hồi...")
+                }
 
-          })
-      })
-  </script>
+            })
+        })
+    </script>
 {% endblock custom_js %}

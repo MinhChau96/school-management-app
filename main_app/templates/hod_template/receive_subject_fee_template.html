@@ -7,36 +7,69 @@
     <section class="content">
         <div class="container-fluid" style="alignment: bottom">
             <div class="row">
-                <div class="col-md-auto">
+                <div class="ml-auto mr-auto col-lg-4 col-md-6 col-sm-8 col-10">
                     <!-- general form elements -->
-                    <div class="card card-danger mb-2">
-                        <div class="card-header">
+                    <div class="card mb-2">
+                        <div class="card-header bg-danger">
                             <h3 class="card-title ">{{ page_title }}</h3>
                         </div>
 
                         <form role="form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
-
-
-                                {% for field in form %}
-                                    <div class="form-group">
-                                        {{ field.errors }}
-                                        {{ field.label_tag }}
-                                        {{ field }}
+                                <div class="row">
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.student.label_tag }}</strong>
+                                        {{ form.student }}
                                     </div>
-                                {% endfor %}
 
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.subject_fee.label_tag }}</strong>
+                                        {{ form.subject_fee }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.other_fee.label_tag }}</strong>
+                                        {{ form.other_fee }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.total_fee.label_tag }}</strong>
+                                        {{ form.total_fee }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.advance_money.label_tag }}</strong>
+                                        {{ form.advance_money }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.payment.label_tag }}</strong>
+                                        {{ form.payment }}
+                                    </div>
+
+                                    <div class="form-group col-12 mb-2">
+                                        <strong class="">{{ form.cash_in_return.label_tag }}</strong>
+                                        {{ form.cash_in_return }}
+                                    </div>
+                                </div>
                             </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-danger btn-block">
+                            <!-- /.card-footer -->
+                            <div class="card-footer" style="text-align: right">
+                                <button type="#"
+                                        class="btn btn-outline-dark col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 h-25"
+                                        style="min-width: 60px">
+                                    Xóa
+                                </button>
+
+                                <button type="submit"
+                                        class="btn btn-danger col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 h-25"
+                                        style="min-width: 60px">
                                     {% if button_text %}
                                         {{ button_text }}
                                     {% else %}
-                                        Submit
+                                        Lưu
                                     {% endif %}
-
                                 </button>
                             </div>
                         </form>
