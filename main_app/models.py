@@ -29,15 +29,6 @@ class CustomUserManager(UserManager):
         assert extra_fields["is_superuser"]
         return self._create_user(email, password, **extra_fields)
 
-
-class Session(models.Model):
-    start_year = models.DateField()
-    end_year = models.DateField()
-
-    def __str__(self):
-        return "Từ ngày " + str(self.start_year) + " đến " + str(self.end_year)
-
-
 class CustomUser(AbstractUser):
     USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
     GENDER = [("M", "Male"), ("F", "Female")]
@@ -63,8 +54,6 @@ class CustomUser(AbstractUser):
 class Admin(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
-
-
 class Course(models.Model):
     name = models.CharField(max_length=120)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -72,6 +61,15 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+class Session(models.Model):
+    start_year = models.DateField()
+    end_year = models.DateField()
+
+    def __str__(self):
+        return "Từ ngày " + str(self.start_year) + " đến " + str(self.end_year)
+
+
 
 class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
